@@ -1,28 +1,33 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app >
+    <div id="apps" @click="rollClick()">
+    <Ballot ref="ballotComponent" /></div>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Ballot from "./components/Ballot.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Ballot,
+  },
+  methods: {
+    rollClick() {
+      console.log("asd");
+      this.$refs.ballotComponent.rollClick();
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#apps {
+  background-image: url("assets/bg.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>
