@@ -1,16 +1,16 @@
 <template>
   <section>
     <div class="wrapper">
-      <div id="names" class="names" v-if="showName">{{ names[0] }}</div>
+      <div id="names" class="names">{{ tempNames[0] }}</div>
     </div>
     <div class="wrapper wrapper2">
-      <div id="gifts" class="names" v-if="showName">{{ namesGift }}</div>
+      <div id="gifts" class="names">{{ tempGift }}</div>
     </div>
 
     <v-dialog v-model="dialog" width="600">
       <v-card class="winner" height="600">
         <v-container fill-height>
-          <v-row align="center" >
+          <v-row align="center">
             <v-col cols="12">
               <p class="infos">Winner</p>
               <p class="text">{{ winner }}</p>
@@ -25,20 +25,20 @@
 </template>
 
 <script>
-import $ from "jquery";
 import axios from "axios";
 
 export default {
   name: "Ballot",
   data() {
     return {
-      show: true,
-      dialog: false,
+      tempNames: [],
+      tempGift: null,
       names: [],
       namesGift: null,
-      winner: "Aliasgher Ahmedabawala",
-      winnerGift: "Iphone Airpods",
-      showName: true,
+      winner: null,
+      winnerGift: null,
+      show: true,
+      dialog: false,
       entrants: [],
       gifts: [
         "AirDots",
@@ -53,10 +53,10 @@ export default {
   methods: {
     randomName() {
       let rand = Math.floor(Math.random() * this.entrants.length);
-      this.names = this.entrants[rand];
+      this.tempNames = this.entrants[rand];
 
       let rand2 = Math.floor(Math.random() * this.gifts.length);
-      this.namesGift = this.gifts[rand2];
+      this.tempGift = this.gifts[rand2];
     },
 
     rollClick() {
@@ -64,13 +64,12 @@ export default {
       let that = this;
       this.setDeceleratingTimeout(5, 30000);
       setTimeout(function () {
-        that.winner = $("#names").text();
-        that.winnerGift = $("#gifts").text();
-        that.showName = false;
+        that.winner = that.tempNames;
+        that.winnerGift = that.tempGift;
         that.dialog = true;
+        that.sendData(that.winner, that.winnerGift)
         let thiss = that;
         setTimeout(() => {
-          console.log(thiss.winner, thiss.winnerGift)
           thiss.resetCounter();
           thiss.dialog = false;
         }, 4000);
@@ -78,7 +77,6 @@ export default {
     },
 
     resetCounter() {
-      this.showName = true;
       this.names = [];
       this.namesGift = null;
       let index = this.entrants.indexOf(this.winner);
@@ -101,19 +99,28 @@ export default {
 
       window.setTimeout(internalCallback, factor);
     },
+
+    getData() {
+      axios({
+        method: "GET",
+        url: "http://localhost:5000/data",
+      }).then(
+        (result) => {
+          this.entrants = result.data.data;
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    },
+
+    sendData(winner, gift) {
+      let data = {winner, gift}
+      axios.post("http://localhost:5000/update", data)
+    },
   },
   mounted() {
-    axios({
-      method: "GET",
-      url: "http://localhost:5000/data",
-    }).then(
-      (result) => {
-        this.entrants = result.data.data;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    this.getData();
   },
 };
 </script>
@@ -121,15 +128,15 @@ export default {
 
 <style  scoped>
 .wrapper {
-  width: 21%;
+  width: 16%;
   position: fixed;
   text-align: center;
   top: 54%;
-  left: 38.5%;
+  left: 41%;
   transform: translate(-50%, -50%);
 }
 .wrapper2 {
-  left: 61% !important;
+  left: 59% !important;
 }
 #roll {
   display: inline-block;
