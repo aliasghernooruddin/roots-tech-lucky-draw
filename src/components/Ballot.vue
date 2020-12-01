@@ -2,31 +2,23 @@
   <section>
     <div class="wrapper">
       <div id="names" class="names" v-if="showName">{{ names[0] }}</div>
-      <!-- <div class="winner">{{ winner }}</div> -->
     </div>
-    <div class="wrapper2">
-      <div class="names" id="gifts" v-if="showName">{{ namesGift }}</div>
-      <!-- <div class="winner">{{ winnerGift }}</div> -->
+    <div class="wrapper wrapper2">
+      <div id="gifts" class="names" v-if="showName">{{ namesGift }}</div>
     </div>
 
-    <v-dialog v-model="dialog" width="500" class="winner">
-      <v-card>
-        <v-card-title class="headline">
-          Use Google's location service?
-        </v-card-title>
-        <v-card-text {{winner}} {{winnerGift}}
-          >Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.</v-card-text
-        >
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">
-            Disagree
-          </v-btn>
-          <v-btn color="green darken-1" text @click="dialog = false">
-            Agree
-          </v-btn>
-        </v-card-actions>
+    <v-dialog v-model="dialog" width="600">
+      <v-card class="winner" height="600">
+        <v-container fill-height>
+          <v-row align="center" >
+            <v-col cols="12">
+              <p class="infos">Winner</p>
+              <p class="text">{{ winner }}</p>
+              <p class="infos">Gift</p>
+              <p class="text">{{ winnerGift }}</p>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
     </v-dialog>
   </section>
@@ -44,8 +36,8 @@ export default {
       dialog: false,
       names: [],
       namesGift: null,
-      winner: null,
-      winnerGift: null,
+      winner: "Aliasgher Ahmedabawala",
+      winnerGift: "Iphone Airpods",
       showName: true,
       entrants: [],
       gifts: [
@@ -78,21 +70,21 @@ export default {
         that.dialog = true;
         let thiss = that;
         setTimeout(() => {
+          console.log(thiss.winner, thiss.winnerGift)
           thiss.resetCounter();
+          thiss.dialog = false;
         }, 4000);
       }, 3000);
     },
 
     resetCounter() {
       this.showName = true;
-      this.names = null;
+      this.names = [];
       this.namesGift = null;
       let index = this.entrants.indexOf(this.winner);
       if (index !== -1) {
         this.entrants.splice(index, 1);
       }
-      this.winner = null;
-      this.winnerGift = null;
       this.rollClick();
     },
 
@@ -132,17 +124,12 @@ export default {
   width: 21%;
   position: fixed;
   text-align: center;
-  top: 60.2%;
+  top: 54%;
   left: 38.5%;
   transform: translate(-50%, -50%);
 }
 .wrapper2 {
-  width: 21%;
-  position: fixed;
-  text-align: center;
-  top: 60.2%;
-  left: 61%;
-  transform: translate(-50%, -50%);
+  left: 61% !important;
 }
 #roll {
   display: inline-block;
@@ -158,20 +145,21 @@ export default {
   border: none;
   outline: none;
   transition: 400ms ease-in-out;
-  font-size: 2.5rem;
+  font-size: 20px;
 }
 .winner {
-  display: inline-block;
-  font-size: 5rem;
-  color: #fbcf26;
-  background: none;
-  border: none;
-  outline: none;
-  transition: 400ms ease-in-out;
   background-image: url("../assets/winner.jpg");
-  height: 100%;
   background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
+}
+.text {
+  font-size: 3.2rem;
+  color: #fed630;
+  text-align: center;
+}
+.infos {
+  font-size: 2rem;
+  color: white;
+  text-align: center;
 }
 </style>
