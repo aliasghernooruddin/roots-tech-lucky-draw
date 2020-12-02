@@ -32,7 +32,7 @@ export default {
   name: "Ballot",
   data() {
     return {
-      number: 0,
+      number: 53,
       tempNames: [],
       tempGift: null,
       names: [],
@@ -73,6 +73,8 @@ export default {
         }, 3000);
       } else {
         this.entrants = [];
+        this.tempNames = [];
+        this.tempGift = null
       }
     },
 
