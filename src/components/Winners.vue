@@ -3,18 +3,18 @@
   <section>
     <v-container fill-height>
       <v-row align="center" justify="center">
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="9">
           <v-img src="../assets/logo.png" aspect-ratio="6" contain></v-img>
           <br /><br />
           <h1 v-if="winnersList.length != 0" class="winners">Winners List</h1>
-          <ul>
+          <ul class="down">
             <li
-              :key="item.key"
+              :key="item.index"
               v-for="item in winnersList"
               class="items"
               :class="[$vuetify.breakpoint.mdAndUp ? 'text-h5' : 'text-body-1']"
             >
-              {{ item["winner"][0] }} - {{ item["gift"] }}
+              {{item.index + 1}})  {{ item["winner"][0] }} - {{ item["gift"] }}
             </li>
           </ul>
         </v-col>
@@ -64,11 +64,17 @@ export default {
   color: white;
   font-size: 30px;
   text-transform: uppercase;
+  margin-bottom: 10px;
 }
 
 .footer {
   background: none !important;
   color: white !important;
   text-decoration: none;
+}
+
+.down {
+  list-style-type:none; 
+  margin-bottom: 65px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div id="apps" @click="rollClick()">
-      <Winners />
+      <!-- <Winners /> -->
       <Ballot ref="ballotComponent" />
     </div>
   </v-app>
@@ -9,17 +9,17 @@
 
 <script>
 import Ballot from "./components/Ballot.vue";
-import Winners from "./components/Winners.vue";
+// import Winners from "./components/Winners.vue";
 
 export default {
   name: "App",
   components: {
     Ballot,
-    Winners,
+    // Winners,
   },
   methods: {
     rollClick() {
-      // this.$refs.ballotComponent.rollClick();
+      this.$refs.ballotComponent.rollClick();
     },
   },
 };
@@ -28,7 +28,7 @@ export default {
 <style>
 #apps {
   background-image: url("assets/bg.jpg");
-  background-image: url("assets/bg1.jpg");
+  /* background-image: url("assets/bg1.jpg"); */
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;

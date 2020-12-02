@@ -17,8 +17,12 @@ app = Flask(__name__)
 def get_data():
     df = pd.read_excel('names.xlsx')
     df = df[['Full Name','Phone number (WhatsApp Only)']]
-    result = df.to_json(orient="split")
-    return result
+    result = df.to_dict(orient="split")
+
+    df2 = pd.read_excel('gifts.xlsx')
+    result2 = df2['Gifts'].tolist()
+    data = {'names':result, 'gifts':result2}
+    return jsonify(data)
 
 
 @app.route('/update', methods=['POST'])

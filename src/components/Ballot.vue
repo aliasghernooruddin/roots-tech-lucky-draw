@@ -1,5 +1,6 @@
 <template>
   <section>
+    <div class="remaining">Winners Count: {{ this.number }}</div>
     <div class="wrapper">
       <div id="names" class="names">{{ tempNames[0] }}</div>
     </div>
@@ -31,7 +32,7 @@ export default {
   name: "Ballot",
   data() {
     return {
-      number:0,
+      number: 0,
       tempNames: [],
       tempGift: null,
       names: [],
@@ -41,14 +42,7 @@ export default {
       show: true,
       dialog: false,
       entrants: [],
-      gifts: [
-        "AirDots",
-        "AirDots Pro",
-        "Xbox",
-        "PS5",
-        "Handsfree",
-        "Smartphone",
-      ],
+      gifts: [],
     };
   },
   methods: {
@@ -61,29 +55,37 @@ export default {
     },
 
     rollClick() {
-      this.show = false;
-      let that = this;
-      this.setDeceleratingTimeout(5, 30000);
-      setTimeout(function () {
-        that.winner = that.tempNames;
-        that.winnerGift = that.tempGift;
-        that.dialog = true;
-        that.sendData(that.winner, that.winnerGift, that.number)
-        that.number = that.number + 1;
-        let thiss = that;
-        setTimeout(() => {
-          thiss.resetCounter();
-          thiss.dialog = false;
-        }, 4000);
-      }, 3000);
+      if (this.number < 53) {
+        this.show = false;
+        let that = this;
+        this.setDeceleratingTimeout(5, 30000);
+        setTimeout(function () {
+          that.winner = that.tempNames;
+          that.winnerGift = that.tempGift;
+          that.dialog = true;
+          that.sendData(that.winner, that.winnerGift, that.number);
+          that.number = that.number + 1;
+          let thiss = that;
+          setTimeout(() => {
+            thiss.resetCounter();
+            thiss.dialog = false;
+          }, 4000);
+        }, 3000);
+      } else {
+        this.entrants = [];
+      }
     },
 
     resetCounter() {
       this.names = [];
       this.namesGift = null;
       let index = this.entrants.indexOf(this.winner);
+      let index2 = this.gifts.indexOf(this.winnerGift);
       if (index !== -1) {
         this.entrants.splice(index, 1);
+      }
+      if (index2 !== -1) {
+        this.gifts.splice(index2, 1);
       }
       this.rollClick();
     },
@@ -108,7 +110,8 @@ export default {
         url: "http://localhost:5000/data",
       }).then(
         (result) => {
-          this.entrants = result.data.data;
+          this.entrants = result.data.names.data;
+          this.gifts = result.data.gifts;
         },
         (error) => {
           console.error(error);
@@ -117,8 +120,8 @@ export default {
     },
 
     sendData(winner, gift, index) {
-      let data = {winner, gift, index}
-      axios.post("http://localhost:5000/update", data)
+      let data = { winner, gift, index };
+      axios.post("http://localhost:5000/update", data);
     },
   },
   mounted() {
@@ -170,5 +173,12 @@ export default {
   font-size: 2rem;
   color: white;
   text-align: center;
+}
+.remaining {
+  position: absolute;
+  color: white;
+  top: 100px;
+  left: 65px;
+  font-size: 2rem;
 }
 </style>
