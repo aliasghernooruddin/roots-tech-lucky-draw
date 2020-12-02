@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     rollClick() {
-      this.$refs.ballotComponent.rollClick();
+      // this.$refs.ballotComponent.rollClick();
     },
   },
 };
@@ -27,7 +27,7 @@ export default {
 
 <style>
 #apps {
-  /* background-image: url("assets/bg.jpg"); */
+  background-image: url("assets/bg.jpg");
   background-image: url("assets/bg1.jpg");
   height: 100%;
   background-position: center;

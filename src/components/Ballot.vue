@@ -13,7 +13,7 @@
           <v-row align="center">
             <v-col cols="12">
               <p class="infos">Winner</p>
-              <p class="text">{{ winner }}</p>
+              <p class="text">{{ winner[0] }}</p>
               <p class="infos">Gift</p>
               <p class="text">{{ winnerGift }}</p>
             </v-col>
@@ -31,11 +31,12 @@ export default {
   name: "Ballot",
   data() {
     return {
+      number:0,
       tempNames: [],
       tempGift: null,
       names: [],
       namesGift: null,
-      winner: null,
+      winner: [],
       winnerGift: null,
       show: true,
       dialog: false,
@@ -67,7 +68,8 @@ export default {
         that.winner = that.tempNames;
         that.winnerGift = that.tempGift;
         that.dialog = true;
-        that.sendData(that.winner, that.winnerGift)
+        that.sendData(that.winner, that.winnerGift, that.number)
+        that.number = that.number + 1;
         let thiss = that;
         setTimeout(() => {
           thiss.resetCounter();
@@ -114,8 +116,8 @@ export default {
       );
     },
 
-    sendData(winner, gift) {
-      let data = {winner, gift}
+    sendData(winner, gift, index) {
+      let data = {winner, gift, index}
       axios.post("http://localhost:5000/update", data)
     },
   },
