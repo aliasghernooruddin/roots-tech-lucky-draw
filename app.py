@@ -31,3 +31,10 @@ def update_data():
     doc_ref = db.collection(u'winners').document()
     doc_ref.set(data)
     return jsonify({'data':True})
+
+
+@app.route('/finalList', methods=['POST'])
+def final_list():
+    data = json.loads(request.data)
+    data = data['finalList']
+    return jsonify({'data':True})

@@ -22,6 +22,10 @@
         </v-container>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="end" width="600">
+      <v-card class="end" height="600"> </v-card>
+    </v-dialog>
   </section>
 </template>
 
@@ -32,7 +36,7 @@ export default {
   name: "Ballot",
   data() {
     return {
-      number: 53,
+      number: 0,
       tempNames: [],
       tempGift: null,
       names: [],
@@ -41,8 +45,10 @@ export default {
       winnerGift: null,
       show: true,
       dialog: false,
+      end: false,
       entrants: [],
       gifts: [],
+      finalList: [],
     };
   },
   methods: {
@@ -55,7 +61,7 @@ export default {
     },
 
     rollClick() {
-      if (this.number < 53) {
+      if (this.number < 3) {
         this.show = false;
         let that = this;
         this.setDeceleratingTimeout(5, 30000);
@@ -64,17 +70,25 @@ export default {
           that.winnerGift = that.tempGift;
           that.dialog = true;
           that.sendData(that.winner, that.winnerGift, that.number);
+          that.finalList.push({
+            index: that.number,
+            name: that.winner[0],
+            phoneNumber: that.winner[1],
+            gift: that.winnerGift,
+          });
           that.number = that.number + 1;
           let thiss = that;
           setTimeout(() => {
             thiss.resetCounter();
             thiss.dialog = false;
           }, 4000);
-        }, 3000);
+        }, 7000);
       } else {
         this.entrants = [];
         this.tempNames = [];
-        this.tempGift = null
+        this.tempGift = null;
+        this.end = true;
+        this.sendFinalListToServer();
       }
     },
 
@@ -125,6 +139,11 @@ export default {
       let data = { winner, gift, index };
       axios.post("http://localhost:5000/update", data);
     },
+
+    sendFinalListToServer() {
+      let data = { finalList: this.finalList };
+      axios.post("http://localhost:5000/finalList", data);
+    },
   },
   mounted() {
     this.getData();
@@ -162,7 +181,12 @@ export default {
   font-size: 20px;
 }
 .winner {
-  background-image: url("../assets/winner.jpg");
+  background-image: url("../assets/winner.jpeg");
+  background-position: center;
+  background-size: cover;
+}
+.end {
+  background-image: url("../assets/end.jpeg");
   background-position: center;
   background-size: cover;
 }

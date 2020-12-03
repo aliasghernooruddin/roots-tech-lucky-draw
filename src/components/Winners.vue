@@ -14,7 +14,7 @@
               class="items"
               :class="[$vuetify.breakpoint.mdAndUp ? 'text-h5' : 'text-body-1']"
             >
-              {{item.index + 1}})  {{ item["winner"][0] }} - {{ item["gift"] }}
+              {{ item.index + 1 }}) {{ item["winner"][0] }} - {{ item["gift"] }}
             </li>
           </ul>
         </v-col>
@@ -22,8 +22,17 @@
     </v-container>
     <v-footer absolute class="font-weight-medium footer">
       <v-col class="text-center footer" cols="12">
+        Copyrights &#169;
+        <a
+          class="footer"
+          target="_blank"
+          href="https://www.instagram.com/rootstechpakistan/"
+        >
+          <strong>Roots Tech </strong></a
+        >
+        <br />
         Designed & Developed by
-        <a class="footer" href="https://webnapps.imfast.io">
+        <a class="footer" target="_blank" href="https://webnapps.imfast.io">
           <strong>Aliasgher Nooruddin</strong></a
         >
       </v-col>
@@ -58,6 +67,7 @@ export default {
 .winners {
   color: white;
   font-size: 40px;
+  text-align: center;
 }
 
 .items {
@@ -74,7 +84,7 @@ export default {
 }
 
 .down {
-  list-style-type:none; 
+  list-style-type: none;
   margin-bottom: 65px;
 }
 </style>
