@@ -1,8 +1,7 @@
-from flask import Flask,jsonify, request
+from flask import Flask, jsonify, request
 import pandas as pd
-import json 
+import json
 import firebase_admin
-import google.cloud
 from firebase_admin import credentials, firestore
 
 cred = credentials.Certificate("./firebase-credentials.json")
@@ -13,15 +12,16 @@ db = firestore.client()
 
 app = Flask(__name__)
 
+
 @app.route('/data', methods=['GET'])
 def get_data():
     df = pd.read_excel('names.xlsx')
-    df = df[['Full Name','Phone number (WhatsApp Only)']]
+    df = df[['Full Name', 'Phone number (WhatsApp Only)']]
     result = df.to_dict(orient="split")
 
     df2 = pd.read_excel('gifts.xlsx')
     result2 = df2['Gifts'].tolist()
-    data = {'names':result, 'gifts':result2}
+    data = {'names': result, 'gifts': result2}
     return jsonify(data)
 
 
@@ -30,11 +30,12 @@ def update_data():
     data = json.loads(request.data)
     doc_ref = db.collection(u'winners').document()
     doc_ref.set(data)
-    return jsonify({'data':True})
+    return jsonify({'data': True})
 
 
 @app.route('/finalList', methods=['POST'])
 def final_list():
     data = json.loads(request.data)
-    data = data['finalList']
-    return jsonify({'data':True})
+    df = pd.DataFrame(data['finalList'])
+    df.to_excel('winners.xlsx', index=False)
+    return jsonify({'data': True})

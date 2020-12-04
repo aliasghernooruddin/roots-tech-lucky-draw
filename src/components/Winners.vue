@@ -31,7 +31,7 @@
           <strong>Roots Tech </strong></a
         >
         <br />
-        Designed & Developed by
+        Developed by
         <a class="footer" target="_blank" href="https://webnapps.imfast.io">
           <strong>Aliasgher Nooruddin</strong></a
         >
@@ -86,5 +86,9 @@ export default {
 .down {
   list-style-type: none;
   margin-bottom: 65px;
+}
+
+strong {
+  color: #7e540b;
 }
 </style>
