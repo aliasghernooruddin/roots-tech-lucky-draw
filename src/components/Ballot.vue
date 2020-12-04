@@ -61,7 +61,7 @@ export default {
     },
 
     rollClick() {
-      if (this.number < 3) {
+      if (this.number < 53) {
         this.show = false;
         let that = this;
         this.setDeceleratingTimeout(5, 30000);

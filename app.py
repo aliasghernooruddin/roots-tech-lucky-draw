@@ -17,20 +17,26 @@ app = Flask(__name__)
 def get_data():
     df = pd.read_excel('names.xlsx')
     df = df[['Full Name', 'Phone number (WhatsApp Only)']]
+    df = df.fillna(0)
     result = df.to_dict(orient="split")
 
     df2 = pd.read_excel('gifts.xlsx')
     result2 = df2['Gifts'].tolist()
     data = {'names': result, 'gifts': result2}
+    
     return jsonify(data)
 
 
 @app.route('/update', methods=['POST'])
 def update_data():
-    data = json.loads(request.data)
-    doc_ref = db.collection(u'winners').document()
-    doc_ref.set(data)
-    return jsonify({'data': True})
+    try:
+        data = json.loads(request.data)
+        doc_ref = db.collection(u'winners').document()
+        doc_ref.set(data)
+        return jsonify({'data': True})
+    except:
+        print("error")
+        return jsonify({'data': True})
 
 
 @app.route('/finalList', methods=['POST'])
