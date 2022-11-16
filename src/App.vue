@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <!-- <div id="apps"> -->
     <div id="apps" @click="rollClick()">
       <!-- <Winners /> -->
       <Ballot ref="ballotComponent" />
@@ -27,7 +28,7 @@ export default {
 
 <style>
 #apps {
-  background-image: url("assets/bg.jpg");
+  background-image: url("assets/background.jpg");
   /* background-image: url("assets/bg1.jpg"); */
   height: 100%;
   background-position: center;

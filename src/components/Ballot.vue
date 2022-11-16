@@ -5,11 +5,11 @@
       <div id="names" class="names">{{ tempNames[0] }}</div>
     </div>
     <div class="wrapper wrapper2">
-      <div id="gifts" class="names">{{ tempGift }}</div>
+      <!-- <div id="gifts" class="names">{{ tempGift }}</div> -->
     </div>
 
-    <v-dialog v-model="dialog" width="600">
-      <v-card class="winner" height="600">
+    <v-dialog v-model="dialog" width="700">
+      <v-card class="winner" height="700">
         <v-container fill-height>
           <v-row align="center">
             <v-col cols="12">
@@ -17,6 +17,8 @@
               <p class="text">{{ winner[0] }}</p>
               <p class="infos">Gift</p>
               <p class="text">{{ winnerGift }}</p>
+              <p class="infos">Mohallah</p>
+              <p class="text">{{ winner[2] }}</p>
             </v-col>
           </v-row>
         </v-container>
@@ -53,11 +55,16 @@ export default {
   },
   methods: {
     randomName() {
+      if (this.number == 51) {
+        this.tempGift = "Smart Tablet";
+      } else if (this.number == 52) {
+        this.tempGift = "Gold Coin";
+      } else {
+        let rand2 = Math.floor(Math.random() * this.gifts.length);
+        this.tempGift = this.gifts[rand2];
+      }
       let rand = Math.floor(Math.random() * this.entrants.length);
       this.tempNames = this.entrants[rand];
-
-      let rand2 = Math.floor(Math.random() * this.gifts.length);
-      this.tempGift = this.gifts[rand2];
     },
 
     rollClick() {
@@ -74,6 +81,7 @@ export default {
             index: that.number,
             name: that.winner[0],
             phoneNumber: that.winner[1],
+            mohallah: that.winner[2],
             gift: that.winnerGift,
           });
           that.number = that.number + 1;
@@ -81,7 +89,7 @@ export default {
           setTimeout(() => {
             thiss.resetCounter();
             thiss.dialog = false;
-          }, 4000);
+          }, 5000);
         }, 7000);
       } else {
         this.entrants = [];
@@ -121,28 +129,29 @@ export default {
     },
 
     getData() {
-      axios({
-        method: "GET",
-        url: "http://localhost:5000/data",
-      }).then(
+      axios.get("http://localhost:5000/data").then(
         (result) => {
           this.entrants = result.data.names.data;
           this.gifts = result.data.gifts;
+          return;
         },
         (error) => {
           console.error(error);
+          return;
         }
       );
     },
 
     sendData(winner, gift, index) {
       let data = { winner, gift, index };
-      axios.post("http://localhost:5000/update", data);
+      return data;
+      // axios.post("http://localhost:5000/update", data);
     },
 
     sendFinalListToServer() {
       let data = { finalList: this.finalList };
       axios.post("http://localhost:5000/finalList", data);
+      return;
     },
   },
   mounted() {
@@ -151,14 +160,13 @@ export default {
 };
 </script>
 
-
-<style  scoped>
+<style scoped>
 .wrapper {
   width: 16%;
   position: fixed;
   text-align: center;
-  top: 54%;
-  left: 41%;
+  top: 58%;
+  left: 51%;
   transform: translate(-50%, -50%);
 }
 .wrapper2 {
@@ -181,19 +189,20 @@ export default {
   font-size: 20px;
 }
 .winner {
-  background-image: url("../assets/winner.jpeg");
+  background-image: url("../assets/winner.jpg");
   background-position: center;
   background-size: cover;
 }
 .end {
-  background-image: url("../assets/end.jpeg");
+  background-image: url("../assets/end.jpg");
   background-position: center;
   background-size: cover;
 }
 .text {
-  font-size: 3.2rem;
-  color: #fed630;
+  font-size: 2.2rem;
+  color: #4b6f79;
   text-align: center;
+  z-index: 100;
 }
 .infos {
   font-size: 2rem;
@@ -203,8 +212,8 @@ export default {
 .remaining {
   position: absolute;
   color: white;
-  top: 100px;
-  left: 65px;
+  top: 208px;
+  left: 155px;
   font-size: 2rem;
 }
 </style>

@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
+from flask_cors import CORS
 
 cred = credentials.Certificate("./firebase-credentials.json")
 
@@ -11,12 +12,12 @@ FIRESTORE = firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/data', methods=['GET'])
 def get_data():
     df = pd.read_excel('names.xlsx')
-    df = df[['Full Name', 'Phone number (WhatsApp Only)']]
+    df = df[['Full Name', 'Contact Number (WhatsApp Only)', 'Mohallah']]
     df = df.fillna(0)
     result = df.to_dict(orient="split")
 
